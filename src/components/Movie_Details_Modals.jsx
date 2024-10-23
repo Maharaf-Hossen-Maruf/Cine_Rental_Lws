@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { getImgUrl } from "../utils/cine-util";
 
-export default function Movie_Details_Modals({movie,onClose}) {
+export default function Movie_Details_Modals({movie,onClose,onCartAdd}) {
     console.log(movie);
     
   return (
@@ -29,7 +29,8 @@ export default function Movie_Details_Modals({movie,onClose}) {
             <div className="grid lg:grid-cols-2 gap-2">
               <a
                 className="bg-primary rounded-lg py-2 px-5 flex items-center justify-center gap-2 text-[#171923] font-semibold text-sm"
-                href="#"
+                // href="#"
+                onClick={(e)=> onCartAdd(e,movie)}
               >
                 <img src="./assets/tag.svg" alt="" />
                 <span>$ {movie.price} | Add to Cart</span>

@@ -4,17 +4,23 @@ import Delete from "../assets/delete.svg";
 import checkout from "../assets/icons/checkout.svg";
 import { MovieContext } from "../context";
 import { getImgUrl } from "../utils/cine-util";
+import {toast} from 'react-toastify'
 
 export default function Cart_Details({ onClose }) {
-  const { cartData, setCartData } = useContext(MovieContext);
+  const { state, dispatch } = useContext(MovieContext);
 
-  function handleDeleteCart(e, id) {
+  function handleDeleteCart(e, item) {
     e.preventDefault();
-    const filteredItem = cartData.filter((item) => {
-      return item.id !== id;
-    });
 
-    setCartData([...filteredItem]);
+    dispatch({
+      type: "REMOVE_FROM_CART",
+      payload: {
+        ...item,
+      },
+    });
+    toast.success(`Removed ${item.title} from the CART`,{
+        position:'bottom-right'
+    })
   }
   return (
     <div className="fixed top-0 left-0 w-screen h-screen z-50 bg-black/60 backdrop-blur-sm">
@@ -24,10 +30,10 @@ export default function Cart_Details({ onClose }) {
             Your Carts
           </h2>
           <div className="space-y-8 lg:space-y-12 max-h-[450px] overflow-auto mb-10 lg:mb-14">
-            {cartData.length === 0 ? (
-              <p className="text-3xl text-center" >Cart Data is Empty </p>
+            {state.cartData.length === 0 ? (
+              <p className="text-3xl text-center">Cart Data is Empty </p>
             ) : (
-              cartData.map((movie) => (
+              state.cartData.map((movie) => (
                 <div key={movie.id} className="grid grid-cols-[1fr_auto] gap-4">
                   <div className="flex items-center gap-4">
                     <img
@@ -50,7 +56,7 @@ export default function Cart_Details({ onClose }) {
                   <div className="flex justify-between gap-4 items-center">
                     <button
                       className="bg-[#D42967] rounded-md p-2 md:px-4 inline-flex items-center space-x-2 text-white"
-                      onClick={(e) => handleDeleteCart(e, movie.id)}
+                      onClick={(e) => handleDeleteCart(e, movie)}
                     >
                       <img className="w-5 h-5" src={Delete} alt="" />
                       <span className="max-md:hidden">Remove</span>
